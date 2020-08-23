@@ -14,6 +14,10 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.core.lightning import LightningModule
 from torch.utils.data import DataLoader, Dataset
 from transformers.optimization import AdamW, get_cosine_schedule_with_warmup
+from telegram.ext import Updater, MessageHandler, Filters 
+
+TELEGRAM_TOKEN= '1342244484:AAHZLAODpPPcGStdUNHgkjnqRYX4MMABX48'
+print('start telegram chat bot')
 
 parser = argparse.ArgumentParser(description='Simsimi based on KoGPT-2')
 
@@ -206,7 +210,8 @@ class KoGPT2Chat(LightningModule):
         sent_tokens = tok(sent)
         with torch.no_grad():
             while 1:
-                q = input('user > ').strip()
+                #q = input('user > ').strip()
+                q = print('입력받은 문장: %s'%(update.message.text)).strip()
                 if q == 'quit':
                     break
                 q_tok = tok(q)
@@ -227,7 +232,23 @@ class KoGPT2Chat(LightningModule):
                         break
                     a += gen.replace('▁', ' ')
                     a_tok = tok(a)
-                print("Simsimi > {}".format(a.strip()))
+                g_m = update.message.reply_text(a)
+                print("생성된 문장 > {}".format(a.strip()))
+                update.message.reply_text(g_m)
+                
+        updater = Updater(TELEGRAM_TOKEN)
+        message_handler = MessageHandler(Filters.text, update.message.text,update.message.reply_text(g_m))
+        updater.dispatcher.add_handler(message_handler)
+
+        updater.start_polling(timeout=3, clean=True)
+        updater.idle()
+                
+                
+    def get_message(bot, update):
+        print('입력받은 문장: %s'%(update.message.text))
+        g_m = kg.make_str(update.message.text)
+        print('생성된 문장: %s'%(g_m))
+        update.message.reply_text(g_m)
 
 
 parser = KoGPT2Chat.add_model_specific_args(parser)
@@ -256,3 +277,4 @@ if __name__ == "__main__":
     if args.chat:
         model = KoGPT2Chat.load_from_checkpoint(args.model_params)
         model.chat()
+
