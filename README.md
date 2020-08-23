@@ -88,7 +88,7 @@ Simsimi > 비싸다고 해서 다 좋은 건 아니에요.
 ## Colab tutorials
 
 - PyTorch
-  - [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/haven-jeon/KoGPT2-chatbot/blob/master/KoGPT2_chatbot_pytorch.ipynb)
+  - [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hopeforrats/KoGPT2-chatbot/blob/master/KoGPT2_chatbot_pytorch_love.ipynb)
 - MXNet
   - [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/haven-jeon/KoGPT2-chatbot/blob/master/KoGPT2_chatbot.ipynb)
 
