@@ -216,7 +216,16 @@ class KoGPT2Chat(LightningModule):
     def chat(self, sent='0'):
         self.tok_path
         tok = SentencepieceTokenizer(self.tok_path, num_best=0, alpha=0)
-        sent_tokens = tok(sent)
+        sent_tokens = tok(sent)        
+        print('updater')
+        updater = Updater(TELEGRAM_TOKEN)
+        print('msg handler')
+        message_handler = MessageHandler(Filters.text, get_message)
+        print('dispatcher')
+        updater.dispatcher.add_handler(message_handler)
+        print('pulling')
+        updater.start_polling(timeout=3, clean=True)
+        print('initial-chat')
         with torch.no_grad():
             while 1:
                 q = input('user > ').strip()
@@ -241,6 +250,8 @@ class KoGPT2Chat(LightningModule):
                     a += gen.replace('▁', ' ')
                     a_tok = tok(a)
                 print("Simsimi > {}".format(a.strip()))
+                print('idle')
+                updater.idle()
 
 
 parser = KoGPT2Chat.add_model_specific_args(parser)
@@ -267,12 +278,5 @@ if __name__ == "__main__":
         trainer.fit(model)
         logging.info('best model path {}'.format(checkpoint_callback.best_model_path))
     if args.chat:
-        updater = Updater(TELEGRAM_TOKEN)
-        message_handler = MessageHandler(Filters.text, get_message)
-        updater.dispatcher.add_handler(message_handler)
-
-        updater.start_polling(timeout=3, clean=True)
-        updater.idle()
-
         model = KoGPT2Chat.load_from_checkpoint(args.model_params)
         model.chat()
