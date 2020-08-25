@@ -251,8 +251,8 @@ class KoGPT2Chat(LightningModule):
                 updater.dispatcher.add_handler(message_handler)
                 print('pulling')
                 updater.start_polling(timeout=3, clean=True)
-                print('initial-chat')
-                updater.idle()
+                #print('initial-chat')
+                #updater.idle()
 
 
 parser = KoGPT2Chat.add_model_specific_args(parser)
