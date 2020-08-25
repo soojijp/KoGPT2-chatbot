@@ -217,15 +217,7 @@ class KoGPT2Chat(LightningModule):
         self.tok_path
         tok = SentencepieceTokenizer(self.tok_path, num_best=0, alpha=0)
         sent_tokens = tok(sent)        
-        print('updater')
-        updater = Updater(TELEGRAM_TOKEN)
-        print('msg handler')
-        message_handler = MessageHandler(Filters.text, get_message)
-        print('dispatcher')
-        updater.dispatcher.add_handler(message_handler)
-        print('pulling')
-        updater.start_polling(timeout=3, clean=True)
-        print('initial-chat')
+        
         with torch.no_grad():
             while 1:
                 q = input('user > ').strip()
@@ -251,6 +243,15 @@ class KoGPT2Chat(LightningModule):
                     a_tok = tok(a)
                 print("Simsimi > {}".format(a.strip()))
                 print('idle')
+                print('updater')
+                updater = Updater(TELEGRAM_TOKEN)
+                print('msg handler')
+                message_handler = MessageHandler(Filters.text, get_message)
+                print('dispatcher')
+                updater.dispatcher.add_handler(message_handler)
+                print('pulling')
+                updater.start_polling(timeout=3, clean=True)
+                print('initial-chat')
                 updater.idle()
 
 
